@@ -4,7 +4,7 @@ Hier beschreibe ich wie du ein S10 Hauskraftwerk von E3DC an eine HomeMatic Haus
 
 Als Schnittstelle zwischen S10 und HomeMatic dient ein Raspberry Pi. Die Applikation stelle ich hier zur Verfügung. Diese habe ich auf Basis einer Beispielapplikation, die E3DC im Downloadbereich hat, erstellt.
 
-Ich Nutze diese Applikation auf einen Raspberry Pi 2 Model B. Die HomeMatic hat die Firmware 2.17.16 (zuvor auch 2.17.15 getestet) installiert. Das S10-E hatte zuvor die Version 2015-082 und jetzt die 2016-02. Soweit ich weiß solle diese Applikation auch für S10-Mini und für S10-SP40 funktionieren. Mit meiner sehr geringen Erfahrung in der Programmierung sind die Änderungen in der Applikation eventuell unprofessionell ausgefallen aber die Funktionalität wird erfüllt.
+Ich nutze diese Applikation auf einen Raspberry Pi 2 Model B. Die HomeMatic hat die Firmware 2.17.16 (zuvor auch 2.17.15 getestet) installiert. Das S10-E hatte zuvor die Version 2015-082 und jetzt die 2016-02. Soweit ich weiß solle diese Applikation auch für S10-Mini und für S10-SP40 funktionieren. Mit meiner sehr geringen Erfahrung in der Programmierung sind die Änderungen in der Applikation eventuell unprofessionell ausgefallen aber die Funktionalität wird erfüllt.
 
 Mit der Applikation also dem RSCP-Protokoll von E3DC (Remote-Storage-Control-Protokoll) fragt man Leistungswerte und Batteriefüllstand vom S10 ab und sendet diese per CURL-Befehl an die XML-API Schnittstelle der HomeMatic.
 
