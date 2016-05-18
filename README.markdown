@@ -258,14 +258,16 @@ var v102 = dom.GetObject("S10_EMS_POWER_PV");
 v101.Variable(v102.Value());
 }
 ```
-Damit der Wert „S10-PV-MAX“ täglich auf „0“ gesetzt wird, kommt ein weiteres Programm zum Einsatz. Dieses wird täglich ausgelöst, z. B. um 0:00 Uhr. Im Script entsteht folgendes:
+Damit der Wert „S10-PV-MAX“ täglich auf „0“ gesetzt wird, kommt ein weiteres Programm zum Einsatz. Dieses wird täglich ausgelöst, z. B. um 0:00 Uhr. Im Script muss folgendes stehen:
 ```shell
 var v001= dom.GetObject("S10_PV-MAX");
 v001.Variable("0");
 ```
+
 __Minimal- und Maximal-Werte SOC__
+
 Ich Speicher mir die Minimal- und Maximal-Werte des SOC (State Of Charge) auch.
-Passend dazu ist das Skript „S10-min-maxSOC.hm“ ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
+Passend dazu ist das Skript „S10-min-maxSOC.hm“ (_Datei Fehlt noch_) ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
 
 ## Rohdaten
 Im Ordner "SourceCode" ist der C++ Quellcode, die Hauptdatei ist die "RscpHomeMatic.ccp"
