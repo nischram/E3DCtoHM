@@ -112,12 +112,12 @@ In der Ausgabe sieht man einmalig die zuvor eingegebenen Parameter, die das Prog
 
 Dieses Programm vorerst im Hintergrund laufen lassen.
 
-###Systemvariable prüfen
+### Systemvariable prüfen
 In der HomeMatic WebUi kannst du nun im Bereich „Status und Bedienung“ die Systemvariable einsehen. Hier sollten nun Zahlen mit einem aktuellen Zeitstempel stehen. Diese Werte aktualisieren sich im Intervallrhythmus.
 
 <img src="http://s20.postimg.org/wj2h805jx/HM_IMG_002.png" alt="HM_IMG_002">
 
-###Autostart der Applikation ermöglichen (durch Crontab-Job)
+### Autostart der Applikation ermöglichen (durch Crontab-Job)
 Damit das Programm und die Variablen nun dauerhaft genutzt werden können, muss die Applikation auf dem Raspberry in den Autostart gebracht werden. Diese geschieht bei einem Raspberry Pi in dem ein Crontab-Job erstellt wird.
 Zuvor muss auf dem Raspberry die Applikation gestoppt werden. Dies geschieht mit der Tastenkombination:
 „ctrl“ + „c“
@@ -205,19 +205,19 @@ In beiden Beispielen ist eine zusätzliche Zeitbedingung (hier 15:00 Uhr) enthal
 
 Weiter habe ich über einen Taster (z. B. „HM-PB-6-WM55“) ein Sonderstart ohne ein Berücksichtigung der Leistungsbedingung eingabaut.
 
-###Heizstab mit Programm ansteuern
+### Heizstab mit Programm ansteuern
 Im Folgenden beschreibe ich ein Programm zum Ansteuern eines Heizstab. (Nur zur Präsentation bei mir nicht getestet)
 Es können diverse Aktoren für diese Anwendung genutzt werden. Daher geben ich keine genauere Bezeichnung für einen Aktor an.
 Es wird wieder ein Programm erstellt. Dieses Programm (Abbildung unten) wertet die Überschussleistung „NET-IN“ aus. Im Beispiel wird bei 510 Watt eingeschaltet und bei einem Bezug „NET-OUT“ von 10 Watt wieder ausgeschaltet.
 
 <img src="http://s20.postimg.org/5kubhnztp/HM_IMG_006.png" alt="HM_IMG_006">
 
-###Werte des S10 auf der Startseite der WebUI anzeigen
+### Werte des S10 auf der Startseite der WebUI anzeigen
 Im Beriech „Einstellungen“ > „Benutzerverwaltung“ > „Bearbeiten“ kann man über „Systemvariable hinzufügen“ entsprechend Systemvariablen zur Startseite hinzufügen.
 
 <img src="http://s20.postimg.org/5yvnh9jx9/HM_IMG_007.png" alt="HM_IMG_007">
 
-###Diverse Anwendungen für S10-Werte
+### Diverse Anwendungen für S10-Werte
 
 __Zeitstempel umrechnen__
 
@@ -267,7 +267,7 @@ __Minimal- und Maximal-Werte SOC__
 Ich Speicher mir die Minimal- und Maximal-Werte des SOC (State Of Charge) auch.
 Passend dazu ist das Skript „S10-min-maxSOC.hm“ ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
 
-##Rohdaten
+## Rohdaten
 Im Ordner "SourceCode" ist der C++ Quellcode, die Hauptdatei ist die "RscpHomeMatic.ccp"
 
 Meine Quelle:
