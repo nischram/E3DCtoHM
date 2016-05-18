@@ -154,7 +154,7 @@ Im Ordner „HM-Scripte“ befindet sich ein Script, mit dem das Display „HM-D
 <img src="http://s20.postimg.org/8w1ijw07x/HM_IMG_003.png" alt="HM_IMG_003">
 
 Als „Bedingung: „Wenn...“ wird als Gerät das Display mit „Tastendruck kurz“ eingebunden. Die Bezeichnung des Display ist im obigen Bild „EG Display“ mit „:1“ wird der Tastendruck unten ausgewählt.
-Als „Aktivität: Dann...“ wird als „Script“ der Inhalt der im Ordner "HM-Scripte" befindlichen Datei „Display_S10.hm“ eingefügt. Es wird nicht die Datei benötigt. Die Auslösung muss für ein Display „sofort“ erfolgen.
+Als „Aktivität: Dann...“ wird als „Script“ der Inhalt der im Ordner "HM-Scripte" befindlichen Datei „Display-S10.hm“ eingefügt. Es wird nicht die Datei benötigt. Die Auslösung muss für ein Display „sofort“ erfolgen.
 
 __Wichtig:__
 Wenn die Systemvariablen mit einem anderen Namen angelegt wurden, muss im Script die Definition der Variable angepasst werden. Im Folgenden ein Ausschnitt aus dem Script-Editor „Atom“ für Mac. In grüner Schriftfarbe werden die Namen der Systemvariablen dargestellt, die ggf. angepasst werden müssen:
@@ -175,7 +175,7 @@ Durch einen kurzen Tastendruck an der Unterkante des Displays löst man das Prog
 Fehleranfälligkeit in diesem Programm:
 Derzeit besteht ein bei der HomeMatic-Software ein Problem mit der maximalen Anzahl von Variablen in Scripten. Hier im Forum diskutiert:
 [http://homematic-forum.de/forum/viewtopic.php?f=26&t=27907&start=100](http://homematic-forum.de/forum/viewtopic.php?f=26&t=27907&start=100)
-In dem oben verwendetem Scrip ist diese Variable z. B. „S10EPP“. Aus eigener Erfahrung kann es bei der HomeMatic zu Problemen führen, wenn in diversen Scripten die maximale Anzahl von ca. 200 Variablen überschritten wird. In dem angegebenen Forum werden Lösungsansätze besprochen. In eigenen Scripten werden seit Bekanntwerden dieses Problem nur noch allgemeine Variablen verwendet (siehe „Display_S10_ohneVariable.hm“).
+In dem oben verwendetem Scrip ist diese Variable z. B. „S10EPP“. Aus eigener Erfahrung kann es bei der HomeMatic zu Problemen führen, wenn in diversen Scripten die maximale Anzahl von ca. 200 Variablen überschritten wird. In dem angegebenen Forum werden Lösungsansätze besprochen. In eigenen Scripten werden seit Bekanntwerden dieses Problem nur noch allgemeine Variablen verwendet (siehe „Display-S10-ohneVariable.hm“).
 
 ### Spülmaschinen per Aktor steuern
 Im Folgenden wird beschrieben, wie man per Aktor eine Spülmaschine leistungsabhängig einschaltet.
@@ -265,7 +265,7 @@ v001.Variable("0");
 ```
 __Minimal- und Maximal-Werte SOC__
 Ich Speicher mir die Minimal- und Maximal-Werte des SOC (State Of Charge) auch.
-Das Skript „S10-min-maxSOC.hm“ ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
+Passend dazu ist das Skript „S10-min-maxSOC.hm“ ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
 
 ##Rohdaten
 Im Ordner "SourceCode" ist der C++ Quellcode, die Hauptdatei ist die "RscpHomeMatic.ccp"
