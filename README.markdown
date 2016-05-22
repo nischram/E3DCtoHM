@@ -53,7 +53,7 @@ Es werden auf dem Raspberry die Dateien „InstallParameter“ und „e3dc-rscp�
 Jetzt wird der lokale oder der SSH-Zugang zum Raspberry benötigt. Ich mache dies mit dem per SSH mit „Terminal“ für MAC.
 Download bei Git:
 ```shell
-git clone git://github.com/nischram/e3dc-rscp.git ~/e3dc-rscp
+git clone git://github.com/nischram/E3DCtoHM.git ~/e3dc-rscp
 ```
 
 ### Applikation ausführbar machen
