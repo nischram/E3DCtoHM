@@ -117,7 +117,7 @@ In der HomeMatic WebUi kannst du nun im Bereich „Status und Bedienung“ die S
 
 <img src="http://s20.postimg.org/wj2h805jx/HM_IMG_002.png" alt="HM_IMG_002">
 
-### Autostart der Applikation ermöglichen (durch Crontab-Job)
+### Autostart der Applikation (durch Crontab-Job)
 Damit das Programm und die Variablen nun dauerhaft genutzt werden können, muss die Applikation auf dem Raspberry in den Autostart gebracht werden. Diese geschieht bei einem Raspberry Pi in dem ein Crontab-Job erstellt wird.
 Zuvor muss auf dem Raspberry die Applikation gestoppt werden. Dies geschieht mit der Tastenkombination:
 „ctrl“ + „c“
@@ -137,6 +137,48 @@ Die Änderung wird mit „ctrl“ + „o“ gespeichert und die Crontab beendet 
 Weitere Informationen zur Crontab entnehmen Sie bitte aus Quellen wie z. B. dieser:
 [https://raspberry.tips/raspberrypi-einsteiger/cronjob-auf-dem-raspberry-pi-einrichten](https://raspberry.tips/raspberrypi-einsteiger/cronjob-auf-dem-raspberry-pi-einrichten)
 
+### Alternative: Autostart der Applikation (mit /etc/rc.local)
+Mit freundlicher Unterstützung im Homematic-Forum, wurde mir von Elmar eine Alternative aufgezeigt.
+
+Link zum Forum:
+[http://homematic-forum.de/forum/viewtopic.php?f=19&t=30095&sid=d0e5f32ac87776b98b340cdce545131b&start=10#p286737](http://homematic-forum.de/forum/viewtopic.php?f=19&t=30095&sid=d0e5f32ac87776b98b340cdce545131b&start=10#p286737)
+
+Hier der Beitrag von Elmar:
+
+Hallo zusammen,
+
+mit Hilfe von Linux-Wissenden Kollegen läuft das ganze jetzt bei mir wie gewünscht automatisch.
+Zunächst habe ich noch ein Startskript (e3dc.sh) im selben Ordner erstellt und ausführbar gemacht mit folgendem Inhalt:
+```shell
+#!/bin/bash
+cd /home/pi/e3dc-rscp
+./e3dc-rscp
+```
+
+Grund: Die Anwendung muss im Ordner ausgeführt werden um die parameters.txt zu finden.
+Anschl. wurde das Startskript in /etc/rc.local aufgenommen:
+```shell
+sudo nano /etc/rc.local
+```
+
+folgende Zeile vor exit 0 einfügen:
+```shell
+/home/pi/e3dc-rscp/e3dc.sh
+```
+Viele Grüße
+
+Elmar
+
+__Fehler im Quellcode geändert__
+
+Leider habe ich das Programm bei mir ohne die "parameters.txt" im täglichen Einsatz, somit war mir der Fehler nicht aufgefallen. Ich habe den Pfad jetzt für den Rasperry Pi angepasst. Er sieht jetzt wie Folgt aus:
+```shell
+/home/pi/e3dc-rscp/parameters.txt
+```
+Sollte meine Applikation nicht auf einen Raspberry Pi installiert werden, muss ggf. der Pfad angepasst werden. Er ist in der Datei "SorceCode/RscpHomeMatic.cpp" auf der Zeile 448 zu finden:
+```shell
+fstream datei("/home/pi/e3dc-rscp/parameters.txt",ios::in);
+```
 ### Raspberry Pi neu starten
 Damit die Applikation nun erneut gestartet wird, kann der Raspberry neu gestartet werden mit:
 ```shell
@@ -181,15 +223,18 @@ In dem oben verwendetem Scrip ist diese Variable z. B. „S10EPP“. Aus eigener
 Im Folgenden wird beschrieben, wie man per Aktor eine Spülmaschine leistungsabhängig einschaltet.
 
 __Spülmaschine prüfen__
+
 Bevor diese Funktion umgesetzt wird, ist zu klären, ob die Spülmaschine diese Möglichkeit unterstützt.
 Man muss nach dem Starten der Spülmaschine den Stecker der Spülmaschine ziehen und kurz drauf wieder einstecken. Wenn die Spülmaschine anschließend das Programm an der gleichen Stelle weiter führt, kann die Steuerung der Spülmaschine per HomeMatic genutzt werden.
 
 __Aktor einbinden__
+
 Für diese Anwendung wird der Zwischensteck-Schaltaktor mit Leistungsmessung „HM-ES-PMSw1-Pl“ benötigt.
 Dieser Aktor muss in der Zuleitung der Spülmaschine gesteckt und bei der HomeMatic angemeldet sein.
 Der Anschluss und das Anlernen des Aktors wird hier nicht näher beschrieben.
 
 __Programm anlegen__
+
 Im Bereich „Programme und Verknüpfungen“ > „Programme“ wird ein neues Programm erstellt.
 Dieses Programm überprüft die momentane Leistung der Spülmaschine. Im Standby benötigen viele Maschinen nur wenig Leistung (Watt). Die von mir verwendete Spülmaschine zieht beim Programmieren maximal 3 – 6 Watt. Wenn die Spülmaschine gestartet wird, erhöht sich die Leistungsaufnahme. Diesen Umstand nutze ich, um den Aktor auszuschalten. Nach dem Ausschalten wartet das Programm auf die Einschaltbedingung und schaltet den Aktor zu. Weiter wird die Bedienung des Aktor gesperrt, damit die Spülmaschine für die Programmlaufzeit nicht abgeschaltet wird. Die Sperre wird nach Ablauf der Zeit aufgehoben.
 Im folgenden Bild ist das gesamte Programm zu sehen, hier mit einer Startbedingung auf den Überschuss mit 2500 Watt. Somit startet die Spülmaschine erst bei einer Überschussleistung von 2500 Watt, was oft erst nach vollständig geladenen Batterien eintritt.
