@@ -175,7 +175,7 @@ Leider habe ich das Programm bei mir ohne die "parameters.txt" im täglichen Ein
 ```shell
 /home/pi/e3dc-rscp/parameters.txt
 ```
-Sollte meine Applikation nicht auf einen Raspberry Pi installiert werden, muss ggf. der Pfad angepasst werden. Er ist in der Datei "SorceCode/RscpHomeMatic.cpp" auf der Zeile 448 zu finden:
+Sollte meine Applikation nicht auf einen Raspberry Pi installiert werden, muss ggf. der Pfad angepasst werden. Er ist in der Datei "SourceCode/RscpHomeMatic.cpp" auf der Zeile 448 zu finden:
 ```shell
 fstream datei("/home/pi/e3dc-rscp/parameters.txt",ios::in);
 ```
