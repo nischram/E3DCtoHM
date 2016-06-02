@@ -445,7 +445,7 @@ static void mainLoop(void)
 int main()
 {
 
-  fstream datei("parameters.txt",ios::in);
+  fstream datei("/home/pi/e3dc-rscp/parameters.txt",ios::in);
   if (datei.is_open()) {
   datei.getline(SERVER_IP,32, ';');
   datei.getline(E3DC_USER,32, ';');
