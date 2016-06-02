@@ -179,6 +179,8 @@ Sollte meine Applikation nicht auf einen Raspberry Pi installiert werden, muss g
 ```shell
 fstream datei("/home/pi/e3dc-rscp/parameters.txt",ios::in);
 ```
+Nach der Änderung muss der "make" Befehl genutzt werden und ggf. die neue Datei "e3dc-rscp" in den übergeordneten Ordner verschoben werden.
+
 ### Raspberry Pi neu starten
 Damit die Applikation nun erneut gestartet wird, kann der Raspberry neu gestartet werden mit:
 ```shell
