@@ -148,7 +148,7 @@ Hier der Beitrag von Elmar:
 Hallo zusammen,
 
 mit Hilfe von Linux-Wissenden Kollegen läuft das ganze jetzt bei mir wie gewünscht automatisch.
-Zunächst habe ich noch ein Startskript (e3dc.sh) im selben Ordner erstellt und ausführbar gemacht mit folgendem Inhalt:
+Zunächst habe ich noch ein Startskript "e3dc.sh" im selben Ordner erstellt und ausführbar gemacht mit folgendem Inhalt: (Datei ist im Ordner enthalten)
 ```shell
 #!/bin/bash
 cd /home/pi/e3dc-rscp
