@@ -27,6 +27,18 @@ Die Namen der Systemvariablen müssen nicht eindeutig sein, es können auch eige
 Die Systemvariablen werden vom Raspberry Pi über die eindeutige Variable „ise_id“ angesteuert oder geändert. Auch nach einer Namensänderung der Systemvariablen bleiben die „ise_id“ immer identisch.
 Es ist wichtig, dass alle Variable mit dem Variablentyp „Zahl“ erstellt werden. Alle Variablen benötigen die Standardvorgabe mit einem Maximalwert von „65000“. Nur die Variable „Time“ benötigt einen Maximalwert von „2147483647“
 
+Da mir die Erfahrung in der Programmierung fehlt, wird die Zeit vom S10 geholt und mit 7200 Minuten umgerechnet. Es wird nicht automatisch mit Sommer/Winterzeit angepasst. Wenn jemand den Sourcecode anpassen kann, wäre es sehr hilfreich. Der Part ist in der Datei RscpHomeMatic.cpp auf den Zeilen 151 bis 158:
+```shell
+case TAG_INFO_TIME: {    // response for TAG_INFO_REQ_TIME
+  int32_t iTime = protocol->getValueAsInt32(response);
+  TAG_EMS_OUT_UNIXTIME = iTime - 7200;
+  int intRSCP_ISE_Time = atoi(RSCP_ISE_Time);
+  printsend(intRSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
+  printf("EMS Unix-Time is %i \n", TAG_EMS_OUT_UNIXTIME);
+  break;
+}
+```
+
 ### XML-API einrichten
 Damit der Raspberry Pi die Werte des S10 zur HomeMatic senden kann, benötigt die HomeMatic die Zusatz-Software „XML-API“.
 Aller technischen Informationen entnehmen Sie bitte der Anleitung des Anbieters.
