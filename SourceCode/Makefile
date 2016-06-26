@@ -1,5 +1,5 @@
 CXX=g++
-ROOT_VALUE=e3dc-rscp
+ROOT_VALUE=/home/pi/e3dc-rscp/e3dc-rscp
 
 all: $(ROOT_VALUE)
 
