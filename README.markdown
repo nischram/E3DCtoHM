@@ -91,6 +91,9 @@ Es werden deine Eingaben für eine Kontrolle ausgegeben, dies kannst du mit „J
 <img src="http://s20.postimg.org/y425i9oil/PI_IMG_002.png" alt="PI_IMG_002">
 
 Jetzt folgt die Abfrage der HomeMatic IP-Adresse und der diversen „ise-id“ zu den verschiedenen Variablen.
+
+<img src="http://s20.postimg.org/4gha2b0pp/PI_IMG_004.png" alt="PI_IMG_004">
+
 Es erfolgen Abfragen, ob ein Leistungsmesser für externe Quellen verbaut ist, oder ob eine Wallbox verbaut ist. Wenn diese Fragen mit „J“ beantwortet werden, benötigen Sie die „ise-id“ für die „ADD“ und „WB_ALL“.
 In der letzten Abfrage kannst du eine Zeit in Sekunden einstellen, die beim Verwenden der Applikation das Intervall darstellt, mit dem Daten vom S10 abgeholt und zur HomeMatic übertragen werden. Um die HomeMatic nicht zu überlasten, empfehle ich hier einen Wert zwischen 30 und 60 Sekunden.
 
@@ -110,7 +113,8 @@ pi@raspberrypi ~/e3dc-rscp $  ./e3dc-rscp
 
 In der Ausgabe sieht man einmalig die zuvor eingegebenen Parameter, die das Programm aus der „parameters.txt“ ausliest. Als Nächstes erfolgt die Authentifizierung am S10 und nach der Sleepzeit (Intervall) werden die ersten Daten geholt und zur HomeMatic übertragen.
 
-<img src="http://s20.postimg.org/4gha2b0pp/PI_IMG_004.png" alt="PI_IMG_004">
+<img src="https://s20.postimg.org/ekytxbyl9/PI_IMG_005.png" alt="PI_IMG_005">
+<img src="https://s20.postimg.org/i9oiwt8m5/PI_IMG_006.png" alt="PI_IMG_006">
 
 Dieses Programm vorerst im Hintergrund laufen lassen.
 
