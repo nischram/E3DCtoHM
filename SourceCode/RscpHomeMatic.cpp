@@ -42,6 +42,7 @@ char TAG_BAT_ISE_SOC[5];
 char RSCP_ISE_Time[5];
 char SleepTime[3];
 
+int TAG_EMS_OUT_UNIXTIME = 0;
 int TAG_EMS_OUT_POWER_PV = 0;
 int TAG_EMS_OUT_POWER_BAT = 0;
 int TAG_EMS_OUT_POWER_HOME = 0;
@@ -89,6 +90,7 @@ int createRequestExample(SRscpFrameBuffer * frameBuffer) {
     {
         printf("\nRequest cyclic data\n");
         // request power data information
+        protocol.appendValue(&rootValue, TAG_INFO_REQ_TIME);
         protocol.appendValue(&rootValue, TAG_EMS_REQ_POWER_PV);
         protocol.appendValue(&rootValue, TAG_EMS_REQ_POWER_BAT);
         protocol.appendValue(&rootValue, TAG_EMS_REQ_POWER_HOME);
@@ -146,11 +148,16 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
         printf("RSCP authentitication level %i\n", ucAccessLevel);
         break;
     }
+    case TAG_INFO_TIME: {    // response for TAG_INFO_REQ_TIME
+        int32_t iTime = protocol->getValueAsInt32(response);
+        TAG_EMS_OUT_UNIXTIME = iTime - 7200;
+        int intRSCP_ISE_Time = atoi(RSCP_ISE_Time);
+        printsend(intRSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
+        printf("EMS Unix-Time is %i \n", TAG_EMS_OUT_UNIXTIME);
+        break;
+    }
     case TAG_EMS_POWER_PV: {    // response for TAG_EMS_REQ_POWER_PV
         int32_t iPower = protocol->getValueAsInt32(response);
-        int RSCP_OUT_Time = time(NULL);
-        int intRSCP_ISE_Time = atoi(RSCP_ISE_Time);
-        printsend(intRSCP_ISE_Time, RSCP_OUT_Time);
         printf("EMS PV power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_PV = iPower;
         int intTAG_EMS_ISE_POWER_PV = atoi(TAG_EMS_ISE_POWER_PV);
