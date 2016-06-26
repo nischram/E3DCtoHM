@@ -37,6 +37,7 @@ char TAG_EMS_ISE_POWER_NET_IN[5];
 char TAG_EMS_ISE_POWER_NET_OUT[5];
 char TAG_EMS_ISE_POWER_GRID[5];
 char TAG_EMS_ISE_POWER_ADD[5];
+char TAG_EMS_ISE_POWER_WB_ALL[5];
 char TAG_BAT_ISE_SOC[5];
 char RSCP_ISE_Time[5];
 char SleepTime[3];
@@ -47,6 +48,7 @@ int TAG_EMS_OUT_POWER_HOME = 0;
 int TAG_EMS_OUT_POWER_GRID = 0;
 int TAG_BAT_OUT_SOC = 0;
 int TAG_EMS_OUT_POWER_ADD = 0;
+int TAG_EMS_OUT_POWER_WB_ALL = 0;
 
 using namespace std;
 
@@ -95,6 +97,11 @@ int createRequestExample(SRscpFrameBuffer * frameBuffer) {
         if (intTAG_EMS_ISE_POWER_ADD > 0){
           protocol.appendValue(&rootValue, TAG_EMS_REQ_POWER_ADD);
         }
+        int intTAG_EMS_ISE_POWER_WB_ALL = atoi(TAG_EMS_ISE_POWER_WB_ALL);
+        if (intTAG_EMS_ISE_POWER_WB_ALL > 0){
+          protocol.appendValue(&rootValue, TAG_EMS_REQ_POWER_WB_ALL);
+        }
+
 
         // request battery information
         SRscpValue batteryContainer;
@@ -197,6 +204,14 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
         TAG_EMS_OUT_POWER_ADD = iPower;
         int intTAG_EMS_ISE_POWER_ADD = atoi(TAG_EMS_ISE_POWER_ADD);
         printsend(intTAG_EMS_ISE_POWER_ADD, TAG_EMS_OUT_POWER_ADD);
+        break;
+    }
+    case TAG_EMS_POWER_WB_ALL: {    // response for TAG_EMS_REQ_POWER_WB_ALL
+        int32_t iPower = protocol->getValueAsInt32(response);
+        printf("EMS WB power meter power is %i W\n", iPower);
+        TAG_EMS_OUT_POWER_WB_ALL = iPower;
+        int intTAG_EMS_ISE_POWER_WB_ALL = atoi(TAG_EMS_ISE_POWER_WB_ALL);
+        printsend(intTAG_EMS_ISE_POWER_WB_ALL, TAG_EMS_OUT_POWER_WB_ALL);
         break;
     }
     case TAG_BAT_DATA: {        // resposne for TAG_BAT_REQ_DATA
@@ -445,7 +460,7 @@ static void mainLoop(void)
 int main()
 {
 
-  fstream datei("/home/pi/e3dc-rscp/parameters.txt",ios::in);
+  fstream datei("parameters.txt",ios::in);
   if (datei.is_open()) {
   datei.getline(SERVER_IP,32, ';');
   datei.getline(E3DC_USER,32, ';');
@@ -459,6 +474,7 @@ int main()
   datei.getline(TAG_EMS_ISE_POWER_NET_OUT,6, ';');
   datei.getline(TAG_EMS_ISE_POWER_GRID,6, ';');
   datei.getline(TAG_EMS_ISE_POWER_ADD,6, ';');
+  datei.getline(TAG_EMS_ISE_POWER_WB_ALL,6, ';');
   datei.getline(TAG_BAT_ISE_SOC,6, ';');
   datei.getline(RSCP_ISE_Time,6, ';');
   datei.getline(SleepTime,4, ';');
@@ -475,6 +491,7 @@ int main()
   std::printf("TAG_EMS_ISE_POWER_NET_OUT:\t%-10s\n",TAG_EMS_ISE_POWER_NET_OUT);
   std::printf("TAG_EMS_ISE_POWER_GRID:\t%-10s\n",TAG_EMS_ISE_POWER_GRID);
   std::printf("TAG_EMS_ISE_POWER_ADD:\t%-10s\n",TAG_EMS_ISE_POWER_ADD);
+  std::printf("TAG_EMS_ISE_POWER_WB_ALL:\t%-10s\n",TAG_EMS_ISE_POWER_WB_ALL);
   std::printf("TAG_BAT_ISE_SOC:\t%-10s\n",TAG_BAT_ISE_SOC);
   std::printf("RSCP_ISE_Time:\t%-10s\n",RSCP_ISE_Time);
   std::printf("SleepTime:\t%-10s\n",SleepTime);
