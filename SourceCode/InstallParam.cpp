@@ -9,8 +9,8 @@ using namespace std;
 int main()
 {
      char SERVER_IP [32], E3DC_USER [32], E3DC_PASS [32], AES_PASS  [32];
-     char HM_IP [32], ISE_POWER_PV [6], ISE_POWER_BAT [6], ISE_POWER_HOME [6], ISE_POWER_NET_IN [6], ISE_POWER_NET_OUT [6], ISE_POWER_GRID [6], ISE_POWER_ADD [6], ISE_BAT_SOC [6], ISE_Time [6], SleepTime [4];
-     char answer;
+     char HM_IP [32], ISE_POWER_PV [6], ISE_POWER_BAT [6], ISE_POWER_HOME [6], ISE_POWER_NET_IN [6], ISE_POWER_NET_OUT [6], ISE_POWER_GRID [6], ISE_POWER_ADD [6], ISE_POWER_WB_ALL [6], ISE_BAT_SOC [6], ISE_Time [6], SleepTime [4];
+     char answer, answer2;
 
      S10_Eingabe:
      cout << "\n" << "Parametereingabe des E3DC S10\n";
@@ -61,17 +61,26 @@ int main()
      cout << "\n" << "Ist eine Leistungsmessung für eine externe Quelle vorhanden? J/N: ";
      cin >> answer;
      cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-     cout << "\n";
      if ( answer == 'J' || answer == 'j' ) {
        cout << "Bitte die ISE_ID der Systemvariablen für die externe Quelle eingeben: ";
        cin.getline(ISE_POWER_ADD, 6);
-       cout << "\n";
      }
      else {
-       int ISE_POWER_ADD_0 = 0;
-       snprintf (ISE_POWER_ADD, (size_t)6, "%d", ISE_POWER_ADD_0);
+       int ISE_POWER_WB_ALL_0 = 0;
+       snprintf (ISE_POWER_WB_ALL, (size_t)6, "%d", ISE_POWER_WB_ALL_0);
      }
-     cout << "Bitte die ISE_ID der Systemvariablen für den Batterie-SOC eingeben: ";
+     cout << "\n" << "Ist eine Wallbox vorhanden? J/N: ";
+     cin >> answer2;
+     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+     if ( answer2 == 'J' || answer2 == 'j' ) {
+       cout << "Bitte die ISE_ID der Wallbox eingeben: ";
+       cin.getline(ISE_POWER_WB_ALL, 6);
+     }
+     else {
+       int ISE_POWER_WB_ALL_0 = 0;
+       snprintf (ISE_POWER_WB_ALL, (size_t)6, "%d", ISE_POWER_WB_ALL_0);
+     }
+     cout << "\n" << "Bitte die ISE_ID der Systemvariablen für den Batterie-SOC eingeben: ";
      cin.getline(ISE_BAT_SOC, 6);
      cout << "\n" << "Bitte die ISE_ID der Systemvariablen für den Sende-Zeitstempel eingeben: ";
      cin.getline(ISE_Time, 6);
@@ -92,6 +101,9 @@ int main()
      std::printf("ISE_POWER_GRID:\t%-10s\n", ISE_POWER_GRID);
      if ( answer == 'J' || answer == 'j' ) {
        std::printf("ISE_POWER_ADD:\t%-10s\n", ISE_POWER_ADD);
+     }
+     if ( answer2 == 'J' || answer2 == 'j' ) {
+       std::printf("ISE_POWER_WB_ALL:\t%-10s\n", ISE_POWER_WB_ALL);
      }
      std::printf("ISE_BAT_SOC:\t%-10s\n", ISE_BAT_SOC);
      std::printf("ISE_Time:\t%-10s\n", ISE_Time);
@@ -114,7 +126,7 @@ int main()
      Ende:
      ofstream fout("parameters.txt");
      if (fout.is_open()) {
-       fout << SERVER_IP << ";" << E3DC_USER << ";" << E3DC_PASS << ";" << AES_PASS << ";" << HM_IP << ";" << ISE_POWER_PV << ";" << ISE_POWER_BAT << ";" << ISE_POWER_HOME << ";" << ISE_POWER_NET_IN << ";" << ISE_POWER_NET_OUT << ";" << ISE_POWER_GRID << ";" << ISE_POWER_ADD << ";" << ISE_BAT_SOC << ";" << ISE_Time << ";" << SleepTime << ";\n";
+       fout << SERVER_IP << ";" << E3DC_USER << ";" << E3DC_PASS << ";" << AES_PASS << ";" << HM_IP << ";" << ISE_POWER_PV << ";" << ISE_POWER_BAT << ";" << ISE_POWER_HOME << ";" << ISE_POWER_NET_IN << ";" << ISE_POWER_NET_OUT << ";" << ISE_POWER_GRID << ";" << ISE_POWER_ADD << ";" << ISE_POWER_WB_ALL << ";" << ISE_BAT_SOC << ";" << ISE_Time << ";" << SleepTime << ";\n";
        fout.close();
        cout << "Ihre Eingaben wurden gespeichert.\n";
        cout << "\n";
