@@ -113,7 +113,6 @@ pi@raspberrypi ~/e3dc-rscp $  ./e3dc-rscp
 
 In der Ausgabe sieht man einmalig die zuvor eingegebenen Parameter, die das Programm aus der „parameters.txt“ ausliest. Als Nächstes erfolgt die Authentifizierung am S10 und nach der Sleepzeit (Intervall) werden die ersten Daten geholt und zur HomeMatic übertragen.
 
-<img src="https://s20.postimg.org/ekytxbyl9/PI_IMG_005.png" alt="PI_IMG_005">
 <img src="https://s20.postimg.org/i9oiwt8m5/PI_IMG_006.png" alt="PI_IMG_006">
 
 Dieses Programm vorerst im Hintergrund laufen lassen.
