@@ -99,6 +99,8 @@ In der letzten Abfrage kannst du eine Zeit in Sekunden einstellen, die beim Verw
 Wieder werden alle eingegebenen Werte dargestellt, und du musst diese bestätigen. Nach dem Bestätigen mit “J“ ist die Installation abgeschlossen.
 Es wurde nun auf dem Raspberry eine neue Datei „parameters.txt“ erstellt. In dieser Datei sind Ihre Eingaben unverschlüsselt enthalten. Bitte behandle diese Datei sorgsam. Wenn sich das Passwort für das Kundenportal ändert, kann dies einfach die Text-Datei bearbeitet werden.
 
+Die Abfrage der Parameter muss bei jeder Programmändrung neu durchgeführt werden.
+
 ### Applikation starten
 Jetzt kann die Applikation für Tests gestartet werden.
 ```shell
