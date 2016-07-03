@@ -66,8 +66,9 @@ int main()
        cin.getline(ISE_POWER_ADD, 6);
      }
      else {
-       int ISE_POWER_WB_ALL_0 = 0;
-       snprintf (ISE_POWER_WB_ALL, (size_t)6, "%d", ISE_POWER_WB_ALL_0);
+       int ISE_POWER_ADD_0 = 0;
+       snprintf (ISE_POWER_ADD, (size_t)6, "%d", ISE_POWER_ADD_0);
+
      }
      cout << "\n" << "Ist eine Wallbox vorhanden? J/N: ";
      cin >> answer2;
