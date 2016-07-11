@@ -62,6 +62,7 @@ Ich erkläre hier nicht die Erstinstallation eines Raspberry Pi beschrieben. Die
 
 ### Netzwerk
 Es ist Wichtig darauf zu achten, dass der Raspberry Pi im selben Netzwerk wie das S10 installiert ist. Der IP-Adressbereich muss gleich sein, zum Beispiel so: 192.168.178.xxx
+
 Auch darf die Verbindung zwischen S10 und Raspberry Pi nicht über eine VPN Verbindung hergestellt werden.
 
 
