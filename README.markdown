@@ -60,6 +60,11 @@ Im selben Menüfenster ist weiter oben die IP-Adresse des S10 zu finden
 ## Raspberry Pi
 Ich erkläre hier nicht die Erstinstallation eines Raspberry Pi beschrieben. Diese Anleitung setzt einen lokalen Zugriff oder SSH-Zugriff auf den Raspberry voraus.
 
+### Netzwerk
+Es ist Wichtig darauf zu achten, dass der Raspberry Pi im selben Netzwerk wie das S10 installiert ist. Der IP-Adressbereich muss gleich sein, zum Beispiel so: 192.168.178.xxx
+Auch darf die Verbindung zwischen S10 und Raspberry Pi nicht über eine VPN Verbindung hergestellt werden.
+
+
 ### Applikation auf den Raspberry kopieren
 Es werden auf dem Raspberry die Dateien „InstallParameter“ und „e3dc-rscp“ benötigt.
 Jetzt wird der lokale oder der SSH-Zugang zum Raspberry benötigt. Ich mache dies mit dem per SSH mit „Terminal“ für MAC.
