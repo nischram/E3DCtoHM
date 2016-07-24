@@ -339,6 +339,88 @@ __Minimal- und Maximal-Werte SOC__
 Ich Speicher mir die Minimal- und Maximal-Werte des SOC (State Of Charge) auch.
 Passend dazu ist das Skript „S10-min-maxSOC.hm“ (_Datei Fehlt noch_) ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
 
+### Watchdog
+
+Teilweise bleibt die RSCP-Applikation hängen und die Automatische re-connection in der Applikation funktioniert leider nicht immer. So wird ein Neustart der RSCP-Applikation nötig.
+
+Für dieses Problem habe ich einen einfachen WatchDog geschrieben. Damit der WatchDog den Betrieb der Applikation überwachen kann, lasse ich mit einem kleinen Teil in der RscpMain, eine Datei im RAMDisk erstellen. In der Datei ist die Unixtime des S10, diese widerum liest der WatchDog ein und vergleicht diese mit einer definierten Differenz mit der aktuellen Ziet.  
+
+In der RscpHomeMatic.cpp sind die Zeilen 93 bis 100 neu:
+```shell
+int WD_Aktivint = atoi(WD_Aktiv);
+if (WD_Aktivint == 1){
+  ofstream fout("/mnt/RAMDisk/UnixtimeHM.txt");
+  if (fout.is_open()) {
+    fout << TAG_EMS_OUT_UNIXTIME << endl;
+    fout.close();
+  }
+  else cerr << "Konnte UnixtimeHM.txt nicht erstellen! (RAMDisk aktiviert?)";
+```
+In der neuen Watchdog.cpp kann noch verschiedenes definiert werden:
+```shell
+//Zeitdifferenz zur aktuellen Zeit bis zur Watchdog aktivierung, in Sekunden
+#define diff            300
+//Zeitinterval für die Abfragen des Watchdog, in Sekunden
+#define sleepTime       120
+//Anzahl Programm Neustarts bis zum Reboot
+#define rebootCounter   4
+//Nach dieser Zeit wird der rebootCounter zurückgesetzt wenn die Daten aktuell sind, in Minuten
+#define resetMin        60
+```
+Wenn der Watchdog zuschlägt, erstellt er eine Datei "Watchdog.csv" im RscpGui Ordner. Somit ist eine kotrolle der aktivität möglich. Es wird je aktivität eine Zeile erstellt, entweder mit reboot eintrag oder mit pkill wenn die Applikation neu gestartet wurde.
+
+Für den automatischen Start muss du den watchdogHM wie zuvor für die Applikation e3dc-rcp auch in die Crontab mit folgender Zeile eintragen:
+```shell
+@reboot /home/pi/e3dc-rscp/watchdogHM
+```
+
+__Wichtig!__
+Damit der WatchDog die Daten überprüfen kann, lasse ich von der "e3dc-rscp" eine Datei in dem RAMDisk erstellen. Wenn ihr den Watchdog nutzen wollt müsst ihr in der InstallParamerter die Frage ob der WatchDog aktiviert werden soll mit "J" beantworten und vorm nutzen der Applikation den RAMDisk am Raspberry Pi aktivieren (nächstes Kapitel). Wenn ihr den WatchDog nicht nutzen wollt muss das RAMDisk nicht erstellt werden.
+
+ToDo: Ein Fehler ist aktuell noch zu beheben -- mehrfacher Reboot des PI --. Also solltet ihr das S10 vom Netzwek trennen oder eine längere sonstige Störung bestehen, würde alle 8 Minuten der Raspberry Pi mit einem Reboot neu gestartet. Um dies zu stoppen musst du folgendes in der Komandozeile eingeben:
+```shell
+pi@raspberrypi:~ $ pkill watchdogHM
+```
+
+### RAMDisk
+
+RAMDisk am Raspberry erstellen:
+Zuerst wird ein Mountpoint für die RAM-Disk erzeugt:
+```
+sudo mkdir /mnt/RAMDisk
+```
+Für die RAM-Disk muß die Filesystem Table angepasst werden:
+```
+sudo nano /etc/fstab
+```
+Einfügen dieser Zeile am Ende der Datei:
+```
+tmpfs /mnt/RAMDisk tmpfs nodev,nosuid,size=4M 0 0
+```
+Die Größe wird über den Parameter "4M" auf 4 MB festgelegt. Jetzt montiert man alle Filesysteme über:
+```
+sudo mount -a
+```
+Der Erfolg lässt sich mit Diskfree überprüfen:
+```
+df
+```
+Es sollte dann ein Eintrag mit der RAM-Disk zu finden sein:
+```
+Filesystem 1K-blocks Used Available Use% Mounted on
+rootfs 15071704 2734624 11674436 19% /
+/dev/root 15071704 2734624 11674436 19% /
+devtmpfs 218620 0 218620 0% /dev
+tmpfs 44580 236 44344 1% /run
+tmpfs 5120 0 5120 0% /run/lock
+tmpfs 89140 0 89140 0% /run/shm
+/dev/mmcblk0p1 57288 19712 37576 35% /boot
+tmpfs 4096 0 4096 0% /mnt/RAMDisk
+```
+
+Diesen Teil zum RAMDisk habe ich von hier Kopiert:
+[http://www.kriwanek.de/raspberry-pi/486-ram-disk-auf-raspberry-pi-einrichten.html](http://www.kriwanek.de/raspberry-pi/486-ram-disk-auf-raspberry-pi-einrichten.html)
+
 ## Rohdaten
 Im Ordner "SourceCode" ist der C++ Quellcode, die Hauptdatei ist die "RscpHomeMatic.ccp"
 
