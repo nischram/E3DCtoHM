@@ -1,5 +1,7 @@
 ## E3DC to HomeMatic
 
+Stand: 24.07.2016
+
 Hier beschreibe ich wie du dein S10 Hauskraftwerk von E3DC an eine HomeMatic Hausautomation von eQ-3 anbinden kannst.
 
 Als Schnittstelle zwischen S10 und HomeMatic dient ein Raspberry Pi. Die Applikation stelle ich hier zur Verfügung. Diese habe ich auf Basis einer Beispielapplikation, die E3DC im Downloadbereich hat, erstellt.
