@@ -343,7 +343,7 @@ Passend dazu ist das Skript „S10-min-maxSOC.hm“ (_Datei Fehlt noch_) ist im 
 
 Teilweise bleibt die RSCP-Applikation hängen und die Automatische re-connection in der Applikation funktioniert leider nicht immer. So wird ein Neustart der RSCP-Applikation nötig.
 
-Für dieses Problem habe ich einen einfachen WatchDog geschrieben. Damit der WatchDog den Betrieb der Applikation überwachen kann, lasse ich mit einem kleinen Teil in der RscpMain, eine Datei im RAMDisk erstellen. In der Datei ist die Unixtime des S10, diese widerum liest der WatchDog ein und vergleicht diese mit einer definierten Differenz mit der aktuellen Ziet.  
+Für dieses Problem habe ich einen einfachen WatchDog geschrieben. Damit der WatchDog den Betrieb der Applikation überwachen kann, lasse ich mit einem kleinen Teil in der e3dc-rscp (RscpHomeMatic.cpp), eine Datei im RAMDisk erstellen. In der Datei ist die Unixtime des S10, diese widerum liest der WatchDog ein und vergleicht diese mit einer definierten Differenz mit der aktuellen Ziet.  
 
 In der RscpHomeMatic.cpp sind die Zeilen 93 bis 100 neu:
 ```shell
@@ -356,7 +356,7 @@ if (WD_Aktivint == 1){
   }
   else cerr << "Konnte UnixtimeHM.txt nicht erstellen! (RAMDisk aktiviert?)";
 ```
-In der neuen Watchdog.cpp kann noch verschiedenes definiert werden:
+In der neuen Watchdog.cpp kann noch verschiedenes definiert werden: (Kompelieren nötig! (make))
 ```shell
 //Zeitdifferenz zur aktuellen Zeit bis zur Watchdog aktivierung, in Sekunden
 #define diff            300
