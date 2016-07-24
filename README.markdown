@@ -375,6 +375,7 @@ Für den automatischen Start muss du den watchdogHM wie zuvor für die Applikati
 ```
 
 __Wichtig!__
+
 Damit der WatchDog die Daten überprüfen kann, lasse ich von der "e3dc-rscp" eine Datei in dem RAMDisk erstellen. Wenn ihr den Watchdog nutzen wollt müsst ihr in der InstallParamerter die Frage ob der WatchDog aktiviert werden soll mit "J" beantworten und vorm nutzen der Applikation den RAMDisk am Raspberry Pi aktivieren (nächstes Kapitel). Wenn ihr den WatchDog nicht nutzen wollt muss das RAMDisk nicht erstellt werden.
 
 ToDo: Ein Fehler ist aktuell noch zu beheben -- mehrfacher Reboot des PI --. Also solltet ihr das S10 vom Netzwek trennen oder eine längere sonstige Störung bestehen, würde alle 8 Minuten der Raspberry Pi mit einem Reboot neu gestartet. Um dies zu stoppen musst du folgendes in der Komandozeile eingeben:
