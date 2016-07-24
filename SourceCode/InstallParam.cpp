@@ -9,8 +9,8 @@ using namespace std;
 int main()
 {
      char SERVER_IP [32], E3DC_USER [32], E3DC_PASS [32], AES_PASS  [32];
-     char HM_IP [32], ISE_POWER_PV [6], ISE_POWER_BAT [6], ISE_POWER_HOME [6], ISE_POWER_NET_IN [6], ISE_POWER_NET_OUT [6], ISE_POWER_GRID [6], ISE_POWER_ADD [6], ISE_POWER_WB_ALL [6], ISE_BAT_SOC [6], ISE_Time [6], SleepTime [4];
-     char answer, answer2;
+     char HM_IP [32], ISE_POWER_PV [6], ISE_POWER_BAT [6], ISE_POWER_HOME [6], ISE_POWER_NET_IN [6], ISE_POWER_NET_OUT [6], ISE_POWER_GRID [6], ISE_POWER_ADD [6], ISE_POWER_WB_ALL [6], ISE_BAT_SOC [6], ISE_Time [6], SleepTime [4], WD_Aktiv[4];
+     char answer, answer2, answer3;
 
      S10_Eingabe:
      cout << "\n" << "Parametereingabe des E3DC S10\n";
@@ -91,6 +91,17 @@ int main()
      std::printf("Die Empfohlene Zeit ist 30 Sekunden.\n ");
      cout << "Eingabe: ";
      cin.getline(SleepTime, 3);
+     cout << "\n" << "Soll der WatchDog aktiviert werden? J/N: (RAMDisk erforderlich!)";
+     cin >> answer3;
+     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+     if ( answer3 == 'J' || answer3 == 'j' ) {
+       int WD_Aktivint = 1;
+       snprintf (WD_Aktiv, (size_t)6, "%d", WD_Aktivint);
+     }
+     else {
+       int WD_Aktivint = 0;
+       snprintf (WD_Aktiv, (size_t)6, "%d", WD_Aktivint);
+     }
 
      std::printf("\n");
      std::printf("HOMEMATIC_IP:\t%-10s\n", HM_IP);
@@ -109,6 +120,12 @@ int main()
      std::printf("ISE_BAT_SOC:\t%-10s\n", ISE_BAT_SOC);
      std::printf("ISE_Time:\t%-10s\n", ISE_Time);
      std::printf("SleepTime:\t%-10s\n", SleepTime);
+     if ( answer3 == 'J' || answer3 == 'j' ) {
+       std::printf("WatchDog Aktiv:   JA");
+     }
+     else {
+       std::printf("WatchDog Aktiv:   NEIN");
+     }
      std::printf("\n");
      cout << "Ist Ihre Eingabe korrekt? J/N: ";
      HM_Answer:
@@ -127,7 +144,7 @@ int main()
      Ende:
      ofstream fout("parameters.txt");
      if (fout.is_open()) {
-       fout << SERVER_IP << ";" << E3DC_USER << ";" << E3DC_PASS << ";" << AES_PASS << ";" << HM_IP << ";" << ISE_POWER_PV << ";" << ISE_POWER_BAT << ";" << ISE_POWER_HOME << ";" << ISE_POWER_NET_IN << ";" << ISE_POWER_NET_OUT << ";" << ISE_POWER_GRID << ";" << ISE_POWER_ADD << ";" << ISE_POWER_WB_ALL << ";" << ISE_BAT_SOC << ";" << ISE_Time << ";" << SleepTime << ";\n";
+       fout << SERVER_IP << ";" << E3DC_USER << ";" << E3DC_PASS << ";" << AES_PASS << ";" << HM_IP << ";" << ISE_POWER_PV << ";" << ISE_POWER_BAT << ";" << ISE_POWER_HOME << ";" << ISE_POWER_NET_IN << ";" << ISE_POWER_NET_OUT << ";" << ISE_POWER_GRID << ";" << ISE_POWER_ADD << ";" << ISE_POWER_WB_ALL << ";" << ISE_BAT_SOC << ";" << ISE_Time << ";" << SleepTime << ";" << WD_Aktiv << ";\n";
        fout.close();
        cout << "Ihre Eingaben wurden gespeichert.\n";
        cout << "\n";

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ctime>
 #include <cstdio>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,6 +42,7 @@ char TAG_EMS_ISE_POWER_WB_ALL[5];
 char TAG_BAT_ISE_SOC[5];
 char RSCP_ISE_Time[5];
 char SleepTime[3];
+char WD_Aktiv[3];
 
 int TAG_EMS_OUT_UNIXTIME = 0;
 int TAG_EMS_OUT_POWER_PV = 0;
@@ -88,6 +90,15 @@ int createRequestExample(SRscpFrameBuffer * frameBuffer) {
     }
     else
     {
+      int WD_Aktivint = atoi(WD_Aktiv);
+      if (WD_Aktivint == 1){
+        ofstream fout("/mnt/RAMDisk/UnixtimeHM.txt");
+        if (fout.is_open()) {
+          fout << TAG_EMS_OUT_UNIXTIME << endl;
+          fout.close();
+        }
+        else cerr << "Konnte UnixtimeHM.txt nicht erstellen! (RAMDisk aktiviert?)";
+      }
         printf("\nRequest cyclic data\n");
         // request power data information
         protocol.appendValue(&rootValue, TAG_INFO_REQ_TIME);
@@ -485,6 +496,7 @@ int main()
   datei.getline(TAG_BAT_ISE_SOC,6, ';');
   datei.getline(RSCP_ISE_Time,6, ';');
   datei.getline(SleepTime,4, ';');
+  datei.getline(WD_Aktiv,4, ';');
   datei.close();
   std::printf("SERVER_IP:\t%-10s\n",SERVER_IP);
   std::printf("E3DC_USER:\t%-10s\n",E3DC_USER);
@@ -502,6 +514,7 @@ int main()
   std::printf("TAG_BAT_ISE_SOC:\t%-10s\n",TAG_BAT_ISE_SOC);
   std::printf("RSCP_ISE_Time:\t%-10s\n",RSCP_ISE_Time);
   std::printf("SleepTime:\t%-10s\n",SleepTime);
+  std::printf("WatchDog:\t%-10s\n",WD_Aktiv);
  }
  else cerr << "Konnte Datei nicht oeffnen\n"; // Fehlerfall
 
