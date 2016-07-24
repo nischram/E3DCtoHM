@@ -31,17 +31,17 @@ char E3DC_USER[32];
 char E3DC_PASS[32];
 char AES_PASS[32];
 char HM_IP[32];
-char TAG_EMS_ISE_POWER_PV[5];
-char TAG_EMS_ISE_POWER_BAT[5];
-char TAG_EMS_ISE_POWER_HOME[5];
-char TAG_EMS_ISE_POWER_NET_IN[5];
-char TAG_EMS_ISE_POWER_NET_OUT[5];
-char TAG_EMS_ISE_POWER_GRID[5];
-char TAG_EMS_ISE_POWER_ADD[5];
-char TAG_EMS_ISE_POWER_WB_ALL[5];
-char TAG_BAT_ISE_SOC[5];
-char RSCP_ISE_Time[5];
-char SleepTime[3];
+char TAG_EMS_ISE_POWER_PV[32];
+char TAG_EMS_ISE_POWER_BAT[32];
+char TAG_EMS_ISE_POWER_HOME[32];
+char TAG_EMS_ISE_POWER_NET_IN[32];
+char TAG_EMS_ISE_POWER_NET_OUT[32];
+char TAG_EMS_ISE_POWER_GRID[32];
+char TAG_EMS_ISE_POWER_ADD[32];
+char TAG_EMS_ISE_POWER_WB_ALL[32];
+char TAG_BAT_ISE_SOC[32];
+char RSCP_ISE_Time[32];
+char SleepTime[5];
 char WD_Aktiv[3];
 
 int TAG_EMS_OUT_UNIXTIME = 0;
@@ -55,13 +55,13 @@ int TAG_EMS_OUT_POWER_WB_ALL = 0;
 
 using namespace std;
 
-void printsend(int id,int value){
+void printsend(char id[32],int value){
     char batch[128];
     memset(batch, 0x00, sizeof(batch));
 
 	// "curl -m1" bedeutet soviel wie Anfrage abschicken aber maximal 1Sekunde auf Antwort warten//
 	// "&" am schluss bedeutet im Hintergrund ausführen damit dieses Programm weiter laufen kann //
-    snprintf(batch, sizeof(batch), "curl \"http://%s/config/xmlapi/statechange.cgi?ise_id=%i&new_value=%i\" > /dev/null 2>&1",HM_IP , id, value);
+    snprintf(batch, sizeof(batch), "curl \"http://%s/config/xmlapi/statechange.cgi?ise_id=%s&new_value=%i\" > /dev/null 2>&1",HM_IP , id, value);
     printf("send to Homematic ISE_ID %i new Value = %i\n",id, value);
     system(batch);
 }
@@ -162,8 +162,7 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
     case TAG_INFO_TIME: {    // response for TAG_INFO_REQ_TIME
         int32_t iTime = protocol->getValueAsInt32(response);
         TAG_EMS_OUT_UNIXTIME = iTime - 7200;
-        int intRSCP_ISE_Time = atoi(RSCP_ISE_Time);
-        printsend(intRSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
+        printsend(RSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
         printf("EMS Unix-Time is %i \n", TAG_EMS_OUT_UNIXTIME);
         break;
     }
@@ -171,48 +170,40 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
         int32_t iPower = protocol->getValueAsInt32(response);
         printf("EMS PV power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_PV = iPower;
-        int intTAG_EMS_ISE_POWER_PV = atoi(TAG_EMS_ISE_POWER_PV);
-        printsend(intTAG_EMS_ISE_POWER_PV, TAG_EMS_OUT_POWER_PV);
+        printsend(TAG_EMS_ISE_POWER_PV, TAG_EMS_OUT_POWER_PV);
         break;
     }
     case TAG_EMS_POWER_BAT: {    // response for TAG_EMS_REQ_POWER_BAT
         int32_t iPower = protocol->getValueAsInt32(response);
         printf("EMS BAT power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_BAT = iPower;
-        int intTAG_EMS_ISE_POWER_BAT = atoi(TAG_EMS_ISE_POWER_BAT);
-        printsend(intTAG_EMS_ISE_POWER_BAT, TAG_EMS_OUT_POWER_BAT);
+        printsend(TAG_EMS_ISE_POWER_BAT, TAG_EMS_OUT_POWER_BAT);
         break;
     }
     case TAG_EMS_POWER_HOME: {    // response for TAG_EMS_REQ_POWER_HOME
         int32_t iPower = protocol->getValueAsInt32(response);
         printf("EMS house power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_HOME = iPower;
-        int intTAG_EMS_ISE_POWER_HOME = atoi(TAG_EMS_ISE_POWER_HOME);
-        printsend(intTAG_EMS_ISE_POWER_HOME, TAG_EMS_OUT_POWER_HOME);
+        printsend(TAG_EMS_ISE_POWER_HOME, TAG_EMS_OUT_POWER_HOME);
         break;
     }
     case TAG_EMS_POWER_GRID: {    // response for TAG_EMS_REQ_POWER_GRID
         int32_t iPower = protocol->getValueAsInt32(response);
         printf("EMS grid power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_GRID = iPower;
-        int intTAG_EMS_ISE_POWER_GRID = atoi(TAG_EMS_ISE_POWER_GRID);
-        printsend(intTAG_EMS_ISE_POWER_GRID, TAG_EMS_OUT_POWER_GRID);
+        printsend(TAG_EMS_ISE_POWER_GRID, TAG_EMS_OUT_POWER_GRID);
         if(iPower >= 0) {
             int TAG_EMS_OUT_POWER_NET_IN = 0;
             int TAG_EMS_OUT_POWER_NET_OUT = iPower;
-            int intTAG_EMS_ISE_POWER_NET_IN = atoi(TAG_EMS_ISE_POWER_NET_IN);
-            printsend(intTAG_EMS_ISE_POWER_NET_IN, TAG_EMS_OUT_POWER_NET_IN);
-            int intTAG_EMS_ISE_POWER_NET_OUT = atoi(TAG_EMS_ISE_POWER_NET_OUT);
-            printsend(intTAG_EMS_ISE_POWER_NET_OUT, TAG_EMS_OUT_POWER_NET_OUT);
+            printsend(TAG_EMS_ISE_POWER_NET_IN, TAG_EMS_OUT_POWER_NET_IN);
+            printsend(TAG_EMS_ISE_POWER_NET_OUT, TAG_EMS_OUT_POWER_NET_OUT);
         }
         else {
           int neg_GRID = (iPower * -1);
           int TAG_EMS_OUT_POWER_NET_IN = neg_GRID;
           int TAG_EMS_OUT_POWER_NET_OUT = 0;
-          int intTAG_EMS_ISE_POWER_NET_IN = atoi(TAG_EMS_ISE_POWER_NET_IN);
-          printsend(intTAG_EMS_ISE_POWER_NET_IN, TAG_EMS_OUT_POWER_NET_IN);
-          int intTAG_EMS_ISE_POWER_NET_OUT = atoi(TAG_EMS_ISE_POWER_NET_OUT);
-          printsend(intTAG_EMS_ISE_POWER_NET_OUT, TAG_EMS_OUT_POWER_NET_OUT);
+          printsend(TAG_EMS_ISE_POWER_NET_IN, TAG_EMS_OUT_POWER_NET_IN);
+          printsend(TAG_EMS_ISE_POWER_NET_OUT, TAG_EMS_OUT_POWER_NET_OUT);
         }
         break;
     }
@@ -220,16 +211,14 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
         int32_t iPower = protocol->getValueAsInt32(response);
         printf("EMS add power meter power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_ADD = iPower;
-        int intTAG_EMS_ISE_POWER_ADD = atoi(TAG_EMS_ISE_POWER_ADD);
-        printsend(intTAG_EMS_ISE_POWER_ADD, TAG_EMS_OUT_POWER_ADD);
+        printsend(TAG_EMS_ISE_POWER_ADD, TAG_EMS_OUT_POWER_ADD);
         break;
     }
     case TAG_EMS_POWER_WB_ALL: {    // response for TAG_EMS_REQ_POWER_WB_ALL
         int32_t iPower = protocol->getValueAsInt32(response);
         printf("EMS WB power meter power is %i W\n", iPower);
         TAG_EMS_OUT_POWER_WB_ALL = iPower;
-        int intTAG_EMS_ISE_POWER_WB_ALL = atoi(TAG_EMS_ISE_POWER_WB_ALL);
-        printsend(intTAG_EMS_ISE_POWER_WB_ALL, TAG_EMS_OUT_POWER_WB_ALL);
+        printsend(TAG_EMS_ISE_POWER_WB_ALL, TAG_EMS_OUT_POWER_WB_ALL);
         break;
     }
     case TAG_BAT_DATA: {        // resposne for TAG_BAT_REQ_DATA
@@ -252,8 +241,7 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
                 float fSOC = protocol->getValueAsFloat32(&batteryData[i]);
                 printf("Battery SOC is %0.1f %%\n", fSOC);
                 TAG_BAT_OUT_SOC  = fSOC;
-                int intTAG_BAT_ISE_SOC = atoi(TAG_BAT_ISE_SOC);
-                printsend(intTAG_BAT_ISE_SOC, TAG_BAT_OUT_SOC);
+                printsend(TAG_BAT_ISE_SOC, TAG_BAT_OUT_SOC);
                 break;
             }
             case TAG_BAT_MODULE_VOLTAGE: {    // response for TAG_BAT_REQ_MODULE_VOLTAGE
