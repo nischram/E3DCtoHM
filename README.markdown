@@ -12,6 +12,10 @@ Mit der Applikation, also dem RSCP-Protokoll von E3DC (Remote-Storage-Control-Pr
 
 Ich beschreibe im Folgenden auch für etwas unerfahrene Anwender die Schritte, die für die Einrichtung nötig sind.
 
+__LOXONE__
+
+Da es mit wenign Änderungen in meiner Applikation möglich ist eine Loxone Zentrale mit Werte zu verorgen, habe ich am Ende ein Kapitel _RSCP to Loxone_ erstellt.
+
 ## Vorbereitung der HomeMatic CCU /CCU2
 ### Systemvariablen einrichten
 In der WebUI der HomeMatic Zentrale müssen diverse Systemvariablen eingerichtet werden.
@@ -29,13 +33,14 @@ Die Namen der Systemvariablen müssen nicht eindeutig sein, es können auch eige
 Die Systemvariablen werden vom Raspberry Pi über die eindeutige Variable „ise_id“ angesteuert oder geändert. Auch nach einer Namensänderung der Systemvariablen bleiben die „ise_id“ immer identisch.
 Es ist wichtig, dass alle Variable mit dem Variablentyp „Zahl“ erstellt werden. Alle Variablen benötigen die Standardvorgabe mit einem Maximalwert von „65000“. Nur die Variable „Time“ benötigt einen Maximalwert von „2147483647“
 
-Da mir die Erfahrung in der Programmierung fehlt, wird die Zeit vom S10 geholt und mit 7200 Minuten umgerechnet. Es wird nicht automatisch mit Sommer/Winterzeit angepasst. Wenn jemand den Sourcecode anpassen kann, wäre es sehr hilfreich. Der Part ist in der Datei RscpHomeMatic.cpp auf den Zeilen 151 bis 158:
+In der RSCP-Applikation besteht die Möglichkeit noch weitere Werte des S10 abzufragen, z.B. Autarky oder Eigenstrom. Hierfür muss die "RscpHomeMatic.cpp" angepasst werden. In der paralellen Anleitung E3DC-Gui habe ich die Autarky, den Eigensterom und die Seriennummer mit aufgenommen. Die ISE_ID wird natürlich auch benötigt und muss ich der "RscpHomeMatic.cpp" eingebaut werden.
+
+Da mir die Erfahrung in der Programmierung fehlt, wird die Zeit vom S10 geholt und mit 7200 Minuten umgerechnet. Es wird nicht automatisch mit Standort und Sommer/Winterzeit angepasst. Wenn jemand den Sourcecode anpassen kann, wäre es sehr hilfreich. Der Part ist in der Datei RscpHomeMatic.cpp auf den Zeilen 151 bis 158:
 ```shell
 case TAG_INFO_TIME: {    // response for TAG_INFO_REQ_TIME
   int32_t iTime = protocol->getValueAsInt32(response);
   TAG_EMS_OUT_UNIXTIME = iTime - 7200;
-  int intRSCP_ISE_Time = atoi(RSCP_ISE_Time);
-  printsend(intRSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
+  printsend(RSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
   printf("EMS Unix-Time is %i \n", TAG_EMS_OUT_UNIXTIME);
   break;
 }
@@ -341,7 +346,7 @@ __Minimal- und Maximal-Werte SOC__
 Ich Speicher mir die Minimal- und Maximal-Werte des SOC (State Of Charge) auch.
 Passend dazu ist das Skript „S10-min-maxSOC.hm“ (_Datei Fehlt noch_) ist im Ordner „HM-Scripte“ zu finden. Das Skript „DATA-PV.hm“ gehört dazu und ersetzt hierbei das Script aus der täglichen Auslösung von PV_Max. Es trägt die Werte in eine zusätzliche Systemvariable für „Yesterday“ ein und speichert alle Werte in einer Datei. Zum Speichern der Datei wird die „CUxD“ verwendet. In dieser Anleitung gehen ich aber auf diese Funktion nicht weiter ein.
 
-### Watchdog
+## Watchdog
 
 Teilweise bleibt die RSCP-Applikation hängen und die Automatische re-connection in der Applikation funktioniert leider nicht immer. So wird ein Neustart der RSCP-Applikation nötig.
 
@@ -385,7 +390,7 @@ ToDo: Ein Fehler ist aktuell noch zu beheben -- mehrfacher Reboot des PI --. Als
 pi@raspberrypi:~ $ pkill watchdogHM
 ```
 
-### RAMDisk
+## RAMDisk
 
 RAMDisk am Raspberry erstellen:
 Zuerst wird ein Mountpoint für die RAM-Disk erzeugt:
@@ -423,6 +428,35 @@ tmpfs 4096 0 4096 0% /mnt/RAMDisk
 
 Diesen Teil zum RAMDisk habe ich von hier Kopiert:
 [http://www.kriwanek.de/raspberry-pi/486-ram-disk-auf-raspberry-pi-einrichten.html](http://www.kriwanek.de/raspberry-pi/486-ram-disk-auf-raspberry-pi-einrichten.html)
+
+## RSCP to Loxone
+
+Durch ein Forum bin ich auf die Möglichkeit aufmerksam gemacht worden, dass mit wenign Änderungen auch eine Loxone Zentrale mit Daten versorgt werden kann.
+
+Da ich keine Loxone besitze gehe ich nicht näher auf das einrichten der Variablen ein.
+
+Im SourceCode der RscpHomeMatic.cpp sind ein paar Änderungen nötig.
+Die Installation kann mit der InstallParameter kann ohne Anpassungen erfolgen. Da die Variablen bei Loxone nicht nur aus Zahlen bestehen, habe ich in der Applikation die "printsend()" Funktion schon von "int" auf "char" geändert (funktioniert für HM auch). In der RscpHomeMatic.cpp muss du nun die CURL-Adresse zur Loxone anpassen.
+Die Zeile 64 sieht für HomeMatic so aus:
+```
+snprintf(batch, sizeof(batch), "curl \"http://%s/config/xmlapi/statechange.cgi?ise_id=%s&new_value=%i\" > /dev/null 2>&1",HM_IP , id, value);
+
+```
+Für Loxone müsste es etwa so aussehen:
+```
+snprintf(batch, sizeof(batch), "curl \"http://user:passwort@%s/​dev/sps/​io/%s/%i" > /dev/null 2>&1",HM_IP , id, value);
+```
+Für HM_IP hast du zuvor in der InstallParameter einfach deine Loxone IP eingetragen. Den "user" und "passwort" für Loxone musst du in der Ziele anpassen.
+Natürlich könnte man die "InstallParameter" und die Abfrage der "parameters.txt" in der "RscpHomeMatic.cpp" auch umschreiben und den "user" und das "passwort" abfragen. Dann müsste die Zeile oben etwa so aussehen:
+```
+snprintf(batch, sizeof(batch), "curl \"http://%s:%s@%s/​dev/sps/​io/%s/%i" > /dev/null 2>&1", loxuser, lospassword, HM_IP , id, value);
+```
+Nach den Anpassungen muss die Applikation neu gebaut (kompeliert) werden. Folgendes eintippen:
+```
+pi@raspberrypi ~/e3dc-rscp $  cd SourceCode
+pi@raspberrypi ~/e3dc-rscp/SourceCode $  make
+```
+Jetzt sollte mit der "e3dc-rscp" deine Loxone Zentrale erreicht werden. Da ich keine Loxone sondern die HomeMatic besitze und habe ich es natürlich nicht getestet, bin also auf Rückmeldungen bei Problemen angewiesen.
 
 ## Rohdaten
 Im Ordner "SourceCode" ist der C++ Quellcode, die Hauptdatei ist die "RscpHomeMatic.ccp"
