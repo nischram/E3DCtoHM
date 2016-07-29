@@ -374,7 +374,7 @@ In der neuen Watchdog.cpp kann noch verschiedenes definiert werden: (Kompelieren
 //Nach dieser Zeit wird der rebootCounter zurückgesetzt wenn die Daten aktuell sind, in Minuten
 #define resetMin        60
 ```
-Wenn der Watchdog zuschlägt, erstellt er eine Datei "Watchdog.csv" im RscpGui Ordner. Somit ist eine kotrolle der aktivität möglich. Es wird je aktivität eine Zeile erstellt, entweder mit reboot eintrag oder mit pkill wenn die Applikation neu gestartet wurde.
+Wenn der Watchdog zuschlägt, erstellt er eine Datei "Watchdog.csv" im e3dc-rscp Ordner. Somit ist eine kotrolle der aktivität möglich. Es wird je aktivität eine Zeile erstellt, entweder mit reboot eintrag oder mit pkill wenn die Applikation neu gestartet wurde.
 
 Für den automatischen Start muss du den watchdogHM wie zuvor für die Applikation e3dc-rcp auch in die Crontab mit folgender Zeile eintragen:
 ```shell
