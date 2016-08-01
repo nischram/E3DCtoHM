@@ -100,8 +100,14 @@ pi@raspberrypi ~/e3dc-rscp $  chmod +x e3dc-rscp
 ```
 - die Datei e3dc-rscp ausführbar machen
 
-<img src="http://s20.postimg.org/cdoq78v31/PI_IMG_001.png" alt="PI_IMG_001">
+Wenn der Watchdog genutzt werden soll, muss auch dieser Ausführbar gemacht werden.
+```shell
+pi@raspberrypi ~/e3dc-rscp $  chmod +x watchdogHM
+```
+Für den Watchdog bitte das Kapitel zum Watchdog beachten.
 
+<img src="http://s20.postimg.org/cdoq78v31/PI_IMG_001.png" alt="PI_IMG_001">
+(one Watchdog)
 ### Parameter installieren
 Jetzt wird die Installationsdatei ausgeführt mit:
 ```shell
@@ -376,10 +382,26 @@ In der neuen Watchdog.cpp kann noch verschiedenes definiert werden: (Kompelieren
 ```
 Wenn der Watchdog zuschlägt, erstellt er eine Datei "Watchdog.csv" im e3dc-rscp Ordner. Somit ist eine kotrolle der aktivität möglich. Es wird je aktivität eine Zeile erstellt, entweder mit reboot eintrag oder mit pkill wenn die Applikation neu gestartet wurde.
 
-Für den automatischen Start muss du den watchdogHM wie zuvor für die Applikation e3dc-rcp auch in die Crontab mit folgender Zeile eintragen:
+Damit der Watchdog genutzt weden kann, muss zuvor die Datei Ausführbar gemacht werden.
+Hier für mit
+```shell
+pi@raspberrypi:~ $  cd e3dc-rscp
+```
+in den Ordner wechseln und mit
+```shell
+pi@raspberrypi ~/e3dc-rscp $  chmod +x watchdogHM 
+```
+den Watchdog Ausführbar machen.
+
+Für den automatischen Start muss du den watchdogHM wie zuvor für die Applikation e3dc-rscp auch in die Crontab mit folgender Zeile eintragen:
 ```shell
 @reboot /home/pi/e3dc-rscp/watchdogHM
 ```
+Nach einem Reboot kannst du dir mit
+```shell
+pi@raspberrypi:~ $ pstree
+```
+einen Baum anzeigen lassen, welche Programme gestartet sind und sehen ob der watchdogHM läuft. Auch wenn sleep dahinter steht läuft der Watchdog.
 
 __Wichtig!__
 
