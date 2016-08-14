@@ -1,4 +1,8 @@
 ## E3DC to HomeMatic
+#### Wichtig
+Bitte meine neue Repository __E3dcGui__ beachten!  
+[https://github.com/nischram/E3dcGui.git](https://github.com/nischram/E3dcGui.git)  
+Diese Repository wird nicht weitergeführt!
 
 Stand: 24.07.2016
 
