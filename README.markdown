@@ -1,9 +1,11 @@
 ## E3DC to HomeMatic
+
 #### Wichtig
 Bitte meine neue Repository __E3dcGui__ beachten!  
 [https://github.com/nischram/E3dcGui.git](https://github.com/nischram/E3dcGui.git)  
 Diese Repository wird nicht weitergeführt!
 
+Stand: 30.11.2016
 
 Hier beschreibe ich wie du dein S10 Hauskraftwerk von E3DC an eine HomeMatic Hausautomation von eQ-3 anbinden kannst.
 
@@ -100,6 +102,7 @@ Für den Watchdog bitte das Kapitel zum Watchdog beachten.
 
 <img src="http://s20.postimg.org/cdoq78v31/PI_IMG_001.png" alt="PI_IMG_001">
 (one Watchdog)
+
 ### Parameter installieren
 Jetzt wird die Installationsdatei ausgeführt mit:
 ```shell
@@ -216,6 +219,9 @@ pi@raspberrypi ~/e3dc-rscp $  sudo reboot
 ```
 - Reboot Befehl mit Administrator-Rechten
 Der Raspberry Pi startet neu und die Applikation wird im Hintergrund ohne Bildschirmausgaben ausgeführt. Nach ca. 1 Minute werden die Werte der Systemvariablen der HomeMatic wieder aktualisiert.
+
+## Umschaltung Sommer-/ Winterzeit
+Die Einstellung der Sommer oder Winterzeit muss von Hand vorgenommen werden, dafür muss in der Datei "Timezone.txt" entweder "Wintertime" oder "Summertime" eingetragen werden.
 
 ## Werte in der HomeMatic nutzen
 Nun können diverse Programme, Funktionen und Anzeigen mit den Werten in der HomeMatic realisiert werden. In dieser Anleitung gehen wir nur auf Möglichkeiten ein, die mit vorhandenen Mitteln getestet wurden und im täglichen Praxiseinsatz sind. Die folgenden Vorschläge sind als Hilfestellung gedacht und können jederzeit abgeändert werden.
