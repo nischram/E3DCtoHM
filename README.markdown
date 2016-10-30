@@ -4,7 +4,6 @@ Bitte meine neue Repository __E3dcGui__ beachten!
 [https://github.com/nischram/E3dcGui.git](https://github.com/nischram/E3dcGui.git)  
 Diese Repository wird nicht weitergeführt!
 
-Stand: 24.07.2016
 
 Hier beschreibe ich wie du dein S10 Hauskraftwerk von E3DC an eine HomeMatic Hausautomation von eQ-3 anbinden kannst.
 
@@ -38,17 +37,6 @@ Die Systemvariablen werden vom Raspberry Pi über die eindeutige Variable „ise
 Es ist wichtig, dass alle Variable mit dem Variablentyp „Zahl“ erstellt werden. Alle Variablen benötigen die Standardvorgabe mit einem Maximalwert von „65000“. Nur die Variable „Time“ benötigt einen Maximalwert von „2147483647“
 
 In der RSCP-Applikation besteht die Möglichkeit noch weitere Werte des S10 abzufragen, z.B. Autarky oder Eigenstrom. Hierfür muss die "RscpHomeMatic.cpp" angepasst werden. In der paralellen Anleitung E3DC-Gui habe ich die Autarky, den Eigensterom und die Seriennummer mit aufgenommen. Die ISE_ID wird natürlich auch benötigt und muss ich der "RscpHomeMatic.cpp" eingebaut werden.
-
-Da mir die Erfahrung in der Programmierung fehlt, wird die Zeit vom S10 geholt und mit 7200 Minuten umgerechnet. Es wird nicht automatisch mit Standort und Sommer/Winterzeit angepasst. Wenn jemand den Sourcecode anpassen kann, wäre es sehr hilfreich. Der Part ist in der Datei RscpHomeMatic.cpp auf den Zeilen 151 bis 158:
-```shell
-case TAG_INFO_TIME: {    // response for TAG_INFO_REQ_TIME
-  int32_t iTime = protocol->getValueAsInt32(response);
-  TAG_EMS_OUT_UNIXTIME = iTime - 7200;
-  printsend(RSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
-  printf("EMS Unix-Time is %i \n", TAG_EMS_OUT_UNIXTIME);
-  break;
-}
-```
 
 ### XML-API einrichten
 Damit der Raspberry Pi die Werte des S10 zur HomeMatic senden kann, benötigt die HomeMatic die Zusatz-Software „XML-API“.
@@ -386,26 +374,10 @@ In der neuen Watchdog.cpp kann noch verschiedenes definiert werden: (Kompelieren
 ```
 Wenn der Watchdog zuschlägt, erstellt er eine Datei "Watchdog.csv" im e3dc-rscp Ordner. Somit ist eine kotrolle der aktivität möglich. Es wird je aktivität eine Zeile erstellt, entweder mit reboot eintrag oder mit pkill wenn die Applikation neu gestartet wurde.
 
-Damit der Watchdog genutzt weden kann, muss zuvor die Datei Ausführbar gemacht werden.
-Hier für mit
-```shell
-pi@raspberrypi:~ $  cd e3dc-rscp
-```
-in den Ordner wechseln und mit
-```shell
-pi@raspberrypi ~/e3dc-rscp $  chmod +x watchdogHM 
-```
-den Watchdog Ausführbar machen.
-
 Für den automatischen Start muss du den watchdogHM wie zuvor für die Applikation e3dc-rscp auch in die Crontab mit folgender Zeile eintragen:
 ```shell
 @reboot /home/pi/e3dc-rscp/watchdogHM
 ```
-Nach einem Reboot kannst du dir mit
-```shell
-pi@raspberrypi:~ $ pstree
-```
-einen Baum anzeigen lassen, welche Programme gestartet sind und sehen ob der watchdogHM läuft. Auch wenn sleep dahinter steht läuft der Watchdog.
 
 __Wichtig!__
 

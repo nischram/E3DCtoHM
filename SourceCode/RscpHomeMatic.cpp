@@ -53,6 +53,8 @@ int TAG_BAT_OUT_SOC = 0;
 int TAG_EMS_OUT_POWER_ADD = 0;
 int TAG_EMS_OUT_POWER_WB_ALL = 0;
 
+int time_zone = 7200;
+
 using namespace std;
 
 void printsend(char id[32],int value){
@@ -161,7 +163,7 @@ int handleResponseValue(RscpProtocol *protocol, SRscpValue *response) {
     }
     case TAG_INFO_TIME: {    // response for TAG_INFO_REQ_TIME
         int32_t iTime = protocol->getValueAsInt32(response);
-        TAG_EMS_OUT_UNIXTIME = iTime - 7200;
+        TAG_EMS_OUT_UNIXTIME = iTime - time_zone;
         printsend(RSCP_ISE_Time, TAG_EMS_OUT_UNIXTIME);
         printf("EMS Unix-Time is %i \n", TAG_EMS_OUT_UNIXTIME);
         break;
@@ -505,6 +507,28 @@ int main()
   std::printf("WatchDog:\t%-10s\n",WD_Aktiv);
  }
  else cerr << "Konnte Datei nicht oeffnen\n"; // Fehlerfall
+
+ char file_Path [100],file_read [100];
+ FILE *fp;
+ snprintf (file_Path, (size_t)100, "/home/pi/e3dc-rscp/Timezone.txt");
+ fp = fopen(file_Path, "r");
+ if(fp == NULL) {
+   printf("Datei konnte NICHT geoeffnet werden.\n");
+   snprintf (file_read, (size_t)20, "Summertime");
+ }
+ else {
+   fgets(file_read,20,fp);
+   strtok(file_read, "\n");
+   fclose(fp);
+ }
+ if (strcmp ("Wintertime",file_read) == 0){
+   time_zone = 3600;
+ }
+ else{
+   time_zone = 7200;
+ }
+ printf("Zeitdifferenz beträgt %i Minuten.\n",time_zone);
+
 
     // endless application which re-connections to server on connection lost
     while(true){
